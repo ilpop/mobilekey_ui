@@ -45,46 +45,56 @@ class _ScrollableListViewState extends State<ScrollableListView> {
   Widget build(BuildContext context) {
     // Get screen width for dynamic layout
     var screenWidth = MediaQuery.of(context).size.width;
+    
+    // Estimate the height of one item (e.g., 100 pixels)
+    double itemHeight = 60.0;
 
     return items.isEmpty
         ? Center(child: CircularProgressIndicator())
-        : Center( // Center the whole ListView in the middle of the screen
-            child: Container(
-              width: screenWidth > 600 ? 600 : screenWidth * 0.9, // Adaptive width
-              child: ListView.builder(
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black, // Black border
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10), // Rounded corners
-                      ),
-                      child: ListTile(
-                        leading: Image.asset(
-                          items[index]['image'],
-                          width: 50,
-                          height: 50,
-                          fit: BoxFit.cover,
-                        ),
-                        title: Center( // Center the text
-                          child: Text(
-                            items[index]['text'],
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold, // Bold text
-                              fontSize: 18,
+        : Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              children: [
+                // Limit height to show 3 items at a time
+                Container(
+                  height: itemHeight * 3, // 3 items visible at a time
+                  width: screenWidth > 600 ? 600 : screenWidth * 0.9, // Adaptive width
+                  child: ListView.builder(
+                    itemCount: items.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.black, // Black border
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(10), // Rounded corners
+                          ),
+                          child: ListTile(
+                            leading: Image.asset(
+                              items[index]['image'],
+                              width: 50,
+                              height: 50,
+                              fit: BoxFit.cover,
+                            ),
+                            title: Center( // Center the text
+                              child: Text(
+                                items[index]['text'],
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold, // Bold text
+                                  fontSize: 18,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                  );
-                },
-              ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
           );
   }
