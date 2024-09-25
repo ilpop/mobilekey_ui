@@ -1,44 +1,45 @@
 [
-    {
-      "image": "/images/logo.png",
-      "text": "Item 1"
-    },
-    {
-      "image": "/images/logo.png",
-      "text": "Item 2"
-    },
-    {
-      "image": "/images/logo.png",
-      "text": "Item 3"
-    },
-    {
-      "image": "/images/logo.png",
-      "text": "Item 4"
-    },
-    {
-      "image": "/images/logo.png",
-      "text": "Item 5"
-    },
-    {
-      "image": "/images/logo.png",
-      "text": "Item 6"
-    },
-    {
-      "image": "/images/logo.png",
-      "text": "Item 7"
-    },
-    {
-      "image": "/images/logo.png",
-      "text": "Item 8"
-    },
-    {
-      "image": "/images/logo.png",
-      "text": "Item 9"
-    },
-    {
-      "image": "/images/logo.png",
-      "text": "Item 10"
-    }
-
-  ]
-  
+  {
+    "image": "images/logo.png",
+    "text": "Item 1"
+  },
+  {
+    "image": "images/logo.png",
+    "text": "Item 2",
+    "link": "https://calendar.google.com/calendar/u/0/r?pli=1"
+  },
+  {
+    "image": "images/logo.png",
+    "text": "Item 3"
+  },
+  {
+    "image": "images/logo.png",
+    "text": "Item 4",
+    "link": "https://calendar.google.com/calendar/u/0/r?pli=1"
+  },
+  {
+    "image": "images/logo.png",
+    "text": "Item 5"
+  },
+  {
+    "image": "images/logo.png",
+    "text": "Item 6"
+  },
+  {
+    "image": "images/logo.png",
+    "text": "Item 7",
+    "link": "https://calendar.google.com/calendar/u/0/r?pli=1"
+  },
+  {
+    "image": "images/logo.png",
+    "text": "Item 8"
+  },
+  {
+    "image": "images/logo.png",
+    "text": "Item 9"
+  },
+  {
+    "image": "images/logo.png",
+    "text": "Item 10"
+  }
+]
