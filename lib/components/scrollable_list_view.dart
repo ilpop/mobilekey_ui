@@ -61,10 +61,18 @@ class _ScrollableListViewState extends State<ScrollableListView> {
                     return Padding(
                       padding: EdgeInsets.symmetric(vertical: 8.0),
                       child: ListTile(
-                        title: Text(assets[index]),
+                        title: Text(
+                          assets[index],
+                          style: const TextStyle(
+                              color: Colors.black), // Black text),
+                        ),
                         subtitle: Text(phoneNumber),
                         leading: CircleAvatar(
-                          child: Text('${index + 1}'),
+                          backgroundColor: Colors.black,
+                          child: Text(
+                            '${index + 1}',
+                            style: const TextStyle(color: Colors.white),
+                          ),
                         ),
                       ),
                     );
