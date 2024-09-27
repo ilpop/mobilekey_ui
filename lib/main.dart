@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/pages/home_page.dart';
+import '/pages/login_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
           color: Colors.white, // White icons
         ),
       ),
-      home: const HomePage(),
+      home: LoginPage(),
     );
   }
 }

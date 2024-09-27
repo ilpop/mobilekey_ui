@@ -4,7 +4,10 @@ import 'package:mobilekey_ui/pages/favorites_page.dart'; // Import Favorites Pag
 import 'package:mobilekey_ui/pages/history_page.dart'; // Import History Page
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final String phoneNumber;
+  final List<String> assets;
+
+  const HomePage({super.key, required this.phoneNumber, required this.assets});
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -14,11 +17,17 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
   // List of pages to switch between
-  final List<Widget> _pages = [
-    const ScrollableListView(), // Home Page content
-    const FavoritesPage(), // Placeholder Favorites Page
-    const HistoryPage(), // Placeholder History Page
-  ];
+  // A list of pages to display, passing the phone number and assets to the home page
+  List<Widget> get _pages {
+    return [
+      ScrollableListView(
+        phoneNumber: widget.phoneNumber,
+        assets: widget.assets,
+      ),
+      const FavoritesPage(), // Favorites Page (Placeholder)
+      const HistoryPage(), // History Page (Placeholder)
+    ];
+  }
 
   // Function to handle bottom navigation item taps
   void _onItemTapped(int index) {
