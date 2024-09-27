@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobilekey_ui/components/list_item_widget.dart';
-import 'package:mobilekey_ui/main.dart';
-import '/services/data_service.dart';
+import 'package:mobilekey_ui/services/json_parser.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,48 +9,69 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final DataService _dataService = DataService();
-  List<dynamic> _items = [];
-  final List<String> _favorites = [];
+  String phoneNumber = '';
+  List<String> assets = [];
 
   @override
   void initState() {
     super.initState();
-    _loadData();
+    loadDataFromAssets();
   }
 
-  void _loadData() async {
-    var items = await _dataService.loadJsonData();
-    if (mounted) {
-      setState(() {
-        _items = items;
-      });
-    }
-  }
+  // Use the JsonParser class to load data from the assets
+  Future<void> loadDataFromAssets() async {
+    JsonParser jsonParser = JsonParser();
+    String assetPath = 'assets/data.json';
 
-  void _toggleFavorite(String item) {
-    setState(() {
-      if (_favorites.contains(item)) {
-        _favorites.remove(item);
-      } else {
-        _favorites.add(item);
+    try {
+      List<dynamic> jsonData = await jsonParser.loadJsonFromAssets(assetPath);
+
+      // Assuming we want to process the first item in the array
+      if (jsonData.isNotEmpty) {
+        Map<String, dynamic> extractedData =
+            jsonParser.extractPhoneNumberAndAssets(jsonData[0]);
+
+        setState(() {
+          phoneNumber = extractedData['phoneNumber'];
+          assets = extractedData['assets'];
+        });
       }
-      _dataService.saveFavorites(_favorites);
-    });
+    } catch (e) {
+      // Handle errors (e.g., show an error message)
+      print('Error loading data: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width > 600
-              ? 600
-              : MediaQuery.of(context).size.width * 0.9,
-          //child: ScrollableListView(key:), // Use ScrollableListView here
-        ),
-      ),
-    );
+    var screenWidth = MediaQuery.of(context).size.width;
+    double itemHeight = 80.0;
+
+    return phoneNumber.isEmpty && assets.isEmpty
+        ? const Center(child: CircularProgressIndicator())
+        : Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: SizedBox(
+                height: itemHeight * 3,
+                width: screenWidth > 600 ? 600 : screenWidth * 0.9,
+                child: ListView.builder(
+                  itemCount: assets.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: ListTile(
+                        title: Text(assets[index]),
+                        subtitle: Text(phoneNumber),
+                        leading: CircleAvatar(
+                          child: Text('${index + 1}'),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          );
   }
 }
