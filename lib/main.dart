@@ -9,13 +9,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('MobileKey'),
-        ),
-        body: const HomePage(),
+      title: "MobileKey",
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme:
+            ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 0, 0, 0)),
       ),
+      debugShowCheckedModeBanner: true,
+      home: HomePage(), // Directly use HomePage here
     );
   }
 }
