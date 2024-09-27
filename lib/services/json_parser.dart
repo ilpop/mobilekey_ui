@@ -1,11 +1,26 @@
-import 'package:flutter/material.dart';
-import 'dart:convert'; // For json parsing
-import 'package:flutter/services.dart' show rootBundle; // To read assets
+import 'dart:convert';
+import 'package:flutter/services.dart' show rootBundle;
 
 class JsonParser {
-  // Function to load and parse JSON data from the given asset path
-  Future<List<dynamic>> loadJsonData(String assetPath) async {
+  // Load JSON data from the assets folder
+  Future<List<dynamic>> loadJsonFromAssets(String assetPath) async {
     String jsonString = await rootBundle.loadString(assetPath);
-    return json.decode(jsonString);
+    return json.decode(jsonString); // Now returns a List<dynamic>
+  }
+
+  // Extract the phone number and assets from each item in the JSON data
+  Map<String, dynamic> extractPhoneNumberAndAssets(
+      Map<String, dynamic> jsonData) {
+    String phoneNumber = jsonData['field_phone'] ?? 'No phone number';
+    String assets = jsonData['field_access_assets'] ?? '';
+
+    // Split the assets string into a list of individual items
+    List<String> assetsList =
+        assets.split(',').map((item) => item.trim()).toList();
+
+    return {
+      'phoneNumber': phoneNumber,
+      'assets': assetsList,
+    };
   }
 }
