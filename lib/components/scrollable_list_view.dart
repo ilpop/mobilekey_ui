@@ -2,11 +2,12 @@ import 'package:flutter/material.dart'; // Import Flutter material package
 import 'package:mobilekey_ui/components/list_item_widget.dart'; // Import ListItemWidget
 
 class ScrollableListView extends StatelessWidget {
-  final List<dynamic> items; 
-  final List<String> favorites; 
-  final Function(String) onToggleFavorite; 
+  final List<dynamic> items;
+  final List<String> favorites;
+  final Function(String) onToggleFavorite;
 
-  ScrollableListView({
+  const ScrollableListView({
+    super.key,
     required this.items,
     required this.favorites,
     required this.onToggleFavorite,
@@ -17,7 +18,7 @@ class ScrollableListView extends StatelessWidget {
     // Show only up to 3 items
     final displayItems = items.take(3).toList(); // Limit to 3 items
 
-    return Container(
+    return SizedBox(
       height: 180, // Adjust the height based on your item size
       child: ListView.builder(
         itemCount: displayItems.length,

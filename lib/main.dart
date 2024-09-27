@@ -2,17 +2,20 @@ import 'dart:convert'; // For json parsing
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle; // To read assets
 import 'package:url_launcher/url_launcher.dart'; // For launching URLs
+import 'services/json_parser.dart'; // Import DataService
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Text('MobileKey'),
+          title: const Text('MobileKey'),
         ),
         body: ScrollableListView(),
       ),
@@ -21,6 +24,8 @@ class MyApp extends StatelessWidget {
 }
 
 class ScrollableListView extends StatefulWidget {
+  const ScrollableListView({super.key});
+
   @override
   _ScrollableListViewState createState() => _ScrollableListViewState();
 }
@@ -31,14 +36,16 @@ class _ScrollableListViewState extends State<ScrollableListView> {
   @override
   void initState() {
     super.initState();
-    loadJsonData();
+    loadData();
   }
 
   // Load JSON data from assets
-  Future<void> loadJsonData() async {
-    String jsonString = await rootBundle.loadString('assets/data.json');
+  Future<void> loadData() async {
+    JsonParser jsonParser = JsonParser();
+    List<dynamic> loadedItems =
+        await jsonParser.loadJsonData('assets/data.json');
     setState(() {
-      items = json.decode(jsonString);
+      items = loadedItems;
     });
   }
 
@@ -55,19 +62,22 @@ class _ScrollableListViewState extends State<ScrollableListView> {
   Widget build(BuildContext context) {
     // Get screen width for dynamic layout
     var screenWidth = MediaQuery.of(context).size.width;
-    
+
     // Estimate the height of one item (e.g., 80 pixels)
     double itemHeight = 80.0;
 
     return items.isEmpty
-        ? Center(child: CircularProgressIndicator())
-        : Center( // Center the list vertically
+        ? const Center(child: CircularProgressIndicator())
+        : Center(
+            // Center the list vertically
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Container(
+              child: SizedBox(
                 // Limit height to show 3 items at a time and center vertically
                 height: itemHeight * 3, // 3 items visible at a time
-                width: screenWidth > 600 ? 600 : screenWidth * 0.9, // Adaptive width
+                width: screenWidth > 600
+                    ? 600
+                    : screenWidth * 0.9, // Adaptive width
                 child: ListView.builder(
                   itemCount: items.length,
                   itemBuilder: (context, index) {
@@ -79,7 +89,8 @@ class _ScrollableListViewState extends State<ScrollableListView> {
                             color: Colors.black, // Black border
                             width: 2.0,
                           ),
-                          borderRadius: BorderRadius.circular(10), // Rounded corners
+                          borderRadius:
+                              BorderRadius.circular(10), // Rounded corners
                         ),
                         child: ListTile(
                           leading: Image.asset(
@@ -88,24 +99,26 @@ class _ScrollableListViewState extends State<ScrollableListView> {
                             height: 50,
                             fit: BoxFit.cover,
                           ),
-                          title: Row( // Display both text and "Reserve" button in a row
+                          title: Row(
+                            // Display both text and "Reserve" button in a row
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 items[index]['text'],
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.bold, // Bold text
                                   fontSize: 18,
                                 ),
                               ),
-                              if (items[index]['link'] != null) // Show "Reserve" if link is present
+                              if (items[index]['link'] !=
+                                  null) // Show "Reserve" if link is present
                                 TextButton(
                                   onPressed: () {
                                     _launchURL(items[index]['link']);
                                   },
-                                  child: Text(
+                                  child: const Text(
                                     'Reserve',
-                                      style: TextStyle(
+                                    style: TextStyle(
                                       color: Colors.blue,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,

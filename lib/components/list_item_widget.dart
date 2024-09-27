@@ -7,7 +7,8 @@ class ListItemWidget extends StatelessWidget {
   final bool isFavorite;
   final VoidCallback onToggleFavorite;
 
-  ListItemWidget({
+  const ListItemWidget({
+    super.key,
     required this.text,
     required this.imageUrl,
     this.link,
@@ -37,7 +38,7 @@ class ListItemWidget extends StatelessWidget {
           children: [
             Text(
               text,
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
@@ -47,7 +48,7 @@ class ListItemWidget extends StatelessWidget {
                 onPressed: () {
                   // Handle link logic here
                 },
-                child: Text(
+                child: const Text(
                   'Reserve',
                   style: TextStyle(
                     color: Colors.blue,
@@ -69,4 +70,3 @@ class ListItemWidget extends StatelessWidget {
     );
   }
 }
-
