@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobilekey_ui/components/scrollable_list_view.dart'; // Import the ScrollableListView component
-import 'package:mobilekey_ui/pages/favorites_page.dart'; // Import Favorites Page
-import 'package:mobilekey_ui/pages/history_page.dart'; // Import History Page
+import 'package:mobilekey_ui/components/scrollable_list_view.dart';
+import 'package:mobilekey_ui/pages/favorites_page.dart';
+import 'package:mobilekey_ui/pages/history_page.dart';
+import 'package:mobilekey_ui/pages/login_page.dart';
 
 class HomePage extends StatefulWidget {
   final String phoneNumber;
@@ -36,11 +37,27 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  // Function to handle logout action
+  void _logout() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+          builder: (context) => const LoginPage()), // Navigate back to login
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('MobileKey'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: _logout, // Handle logout
+            tooltip: 'Logout',
+          ),
+        ],
       ),
       body: _pages[_selectedIndex], // Display the selected page
 
