@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobilekey_ui/services/json_parser.dart';
-import 'package:mobilekey_ui/pages/home_page.dart';
+import 'package:mobilekey_ui/pages/home_page.dart'; // Import ScrollableListView
+import 'package:mobilekey_ui/services/room_type_service.dart'; // Import RoomTypeService
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,42 +13,40 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _phoneController = TextEditingController();
   String? _errorMessage;
 
-  // Function to validate the mobile number from the JSON data
+  // Function to log in and fetch room types
   Future<void> _login() async {
     String enteredPhone = _phoneController.text.trim();
-    JsonParser jsonParser = JsonParser();
-    String assetPath = 'assets/data.json';
+
+    // Check if the phone number is empty
+    if (enteredPhone.isEmpty) {
+      setState(() {
+        _errorMessage = 'Please enter a phone number.';
+      });
+      return;
+    }
+
+    // Simulating login success for demonstration
+    RoomTypeService roomTypeService = RoomTypeService();
 
     try {
-      List<dynamic> jsonData = await jsonParser.loadJsonFromAssets(assetPath);
+      // Fetch the room types after successful login
+      List<String> roomTypes = await roomTypeService.fetchRoomTypes();
 
-      for (var item in jsonData) {
-        if (item['field_phone'] == enteredPhone) {
-          Map<String, dynamic> extractedData =
-              jsonParser.extractPhoneNumberAndAssets(item);
-
-          // If the phone number is found, navigate to the home page and pass the data
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomePage(
-                phoneNumber: extractedData['phoneNumber'],
-                assets: extractedData['assets'],
-              ),
-            ),
-          );
-          return;
-        }
-      }
-
-      // If phone number not found, show an error
-      setState(() {
-        _errorMessage = 'Phone number not found.';
-      });
+      // Navigate to ScrollableListView and pass the room types as assets
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePage(
+            phoneNumber: enteredPhone, // Use the entered phone number
+            assets: roomTypes, // Room types fetched from the API
+          ),
+        ),
+      );
     } catch (e) {
-      print('Error loading data: $e');
+      print('Error fetching room types: $e');
       setState(() {
-        _errorMessage = 'An error occurred. Please try again.';
+        _errorMessage =
+            'An error occurred while fetching room types. Please try again.';
       });
     }
   }
