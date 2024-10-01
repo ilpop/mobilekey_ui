@@ -36,7 +36,7 @@ class _ScrollableListViewState extends State<ScrollableListView> {
   Widget build(BuildContext context) {
     // Calculate the height for three items (assuming each item is around 80 pixels in height)
     double itemHeight = 70.0;
-    double listHeight = itemHeight * 3; // For 3 items at a time
+    double listHeight = itemHeight * 6; // For 3 items at a time
 
     return Center(
       child: SizedBox(
