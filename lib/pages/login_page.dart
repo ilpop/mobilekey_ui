@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobilekey_ui/pages/home_page.dart'; // Import ScrollableListView
-import 'package:mobilekey_ui/services/room_type_service.dart'; // Import RoomTypeService
+import 'package:mobilekey_ui/pages/home_page.dart';
+import 'package:mobilekey_ui/services/data_service.dart';
+import 'package:mobilekey_ui/services/json_parser.dart'; // Import JsonParser
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -26,19 +27,31 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     // Simulating login success for demonstration
-    RoomTypeService roomTypeService = RoomTypeService();
+    DataService dataService = DataService();
+    JsonParser jsonParser = JsonParser();
 
     try {
-      // Fetch the room types after successful login
-      List<String> roomTypes = await roomTypeService.fetchRoomTypes();
+      // Fetch the room data
+      List<dynamic> roomData = await dataService.loadJsonData();
 
-      // Navigate to ScrollableListView and pass the room types as assets
+      // Extract the assets from the room data
+      List<String> rooms = roomData
+          .map((item) {
+            Map<String, dynamic> parsedData =
+                jsonParser.extractPhoneNumberAndAssets(item);
+            return parsedData['assets']
+                .join(', '); // Join the assets list into a string
+          })
+          .toList()
+          .cast<String>();
+
+      // Navigate to HomePage with the phone number and room types
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => HomePage(
             phoneNumber: enteredPhone, // Use the entered phone number
-            assets: roomTypes, // Room types fetched from the API
+            assets: rooms, // Pass the room assets to HomePage
           ),
         ),
       );
@@ -46,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
       print('Error fetching room types: $e');
       setState(() {
         _errorMessage =
-            'An error occurred while fetching room types. Please try again.';
+            'An error occurred while fetching rooms. Please try again.';
       });
     }
   }
@@ -73,8 +86,8 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _login,
-              child: const Text('Login'),
               style: ElevatedButton.styleFrom(),
+              child: const Text('Login'),
             ),
           ],
         ),

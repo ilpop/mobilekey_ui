@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http; // For making HTTP requests
 import 'package:flutter/material.dart'; // For building the UI
 
 class CityCenterLibraryRooms extends StatefulWidget {
+  const CityCenterLibraryRooms({super.key});
+
   @override
   _CityCenterLibraryRoomsState createState() => _CityCenterLibraryRoomsState();
 }
@@ -41,12 +43,12 @@ class _CityCenterLibraryRoomsState extends State<CityCenterLibraryRooms> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('City Center Library Rooms'),
+        title: const Text('City Center Library Rooms'),
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : rooms.isEmpty
-              ? Center(child: Text('No rooms found.'))
+              ? const Center(child: Text('No rooms found.'))
               : ListView.builder(
                   itemCount: rooms.length,
                   itemBuilder: (context, index) {

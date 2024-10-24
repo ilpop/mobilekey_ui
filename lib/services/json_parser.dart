@@ -23,20 +23,20 @@ class JsonParser {
       phoneNumber = 'No phone number';
     }
 
-    // // Check if assets is a string and split if necessary
-    // String assets = '';
+    // Check if assets is a string and split if necessary
+    String assets = '';
 
-    // if (jsonData['field_access_assets'] is String) {
-    //   assets = jsonData['field_access_assets'];
-    // } else if (jsonData['field_access_assets'] is List) {
-    //   // If it's already a list, join them into a comma-separated string
-    //   assets = jsonData['field_access_assets'].join(', ');
-    // }
+    if (jsonData['field_access_assets'] is String) {
+      assets = jsonData['field_access_assets'];
+    } else if (jsonData['field_access_assets'] is List) {
+      // If it's already a list, join them into a comma-separated string
+      assets = jsonData['field_access_assets'].join(', ');
+    }
 
-    // // Split the assets string into a list of individual items
-    // List<String> assetsList =
-    //     assets.split(',').map((item) => item.trim()).toList();
+    // Split the assets string into a list of individual items
+    List<String> assetsList =
+        assets.split(',').map((item) => item.trim()).toList();
 
-    return {'phoneNumber': phoneNumber};
+    return {'phoneNumber': phoneNumber, 'assets': assetsList};
   }
 }
