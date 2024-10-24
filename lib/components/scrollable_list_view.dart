@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ScrollableListView extends StatefulWidget {
   final String phoneNumber;
@@ -21,8 +22,35 @@ class _ScrollableListViewState extends State<ScrollableListView> {
   @override
   void initState() {
     super.initState();
-    // Initialize all items as not favorited (false)
-    _favorites = List<bool>.filled(widget.assets.length, false);
+    // Load favorites from SharedPreferences
+    _loadFavorites();
+  }
+
+  // Load favorite status from SharedPreferences
+  Future<void> _loadFavorites() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? favoriteItems = prefs.getStringList('favorites');
+
+    if (favoriteItems != null) {
+      _favorites =
+          widget.assets.map((asset) => favoriteItems.contains(asset)).toList();
+    } else {
+      _favorites = List<bool>.filled(widget.assets.length, false);
+    }
+    setState(() {});
+  }
+
+  // Save favorites to SharedPreferences
+  Future<void> _saveFavorites() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> favoritesList = widget.assets
+        .asMap()
+        .entries
+        .where((entry) => _favorites[entry.key])
+        .map((entry) => entry.value)
+        .toList();
+
+    await prefs.setStringList('favorites', favoritesList);
   }
 
   // Toggle the favorite status of an item
@@ -30,6 +58,7 @@ class _ScrollableListViewState extends State<ScrollableListView> {
     setState(() {
       _favorites[index] = !_favorites[index];
     });
+    _saveFavorites(); // Save the favorites after toggling
   }
 
   @override
@@ -54,8 +83,8 @@ class _ScrollableListViewState extends State<ScrollableListView> {
                           : Icons
                               .favorite_border, // Toggle between filled and border icon
                       color: _favorites[index]
-                          ? Colors.black
-                          : null, // Fill icon if favorited
+                          ? Colors.red // Change to red for filled icon
+                          : null, // Default color for unfavored icon
                     ),
                     onPressed: () =>
                         _toggleFavorite(index), // Toggle favorite status
