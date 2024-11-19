@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,32 +17,40 @@ class ScrollableListView extends StatefulWidget {
   _ScrollableListViewState createState() => _ScrollableListViewState();
 }
 
-class _ScrollableListViewState extends State<ScrollableListView> {
-  // Keep track of which items are favorited
+class _ScrollableListViewState extends State<ScrollableListView>
+    with TickerProviderStateMixin {
   List<bool> _favorites = [];
+  List<bool> _unlocked = [];
+  List<AnimationController> _shakeControllers = [];
 
   @override
   void initState() {
     super.initState();
-    // Load favorites from SharedPreferences
-    _loadFavorites();
+    _initializeStates();
+
+    for (int i = 0; i < widget.assets.length; i++) {
+      _shakeControllers.add(
+        AnimationController(
+          vsync: this,
+          duration: const Duration(milliseconds: 300),
+        ),
+      );
+    }
   }
 
-  // Load favorite status from SharedPreferences
-  Future<void> _loadFavorites() async {
+  Future<void> _initializeStates() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String>? favoriteItems = prefs.getStringList('favorites');
 
-    if (favoriteItems != null) {
-      _favorites =
-          widget.assets.map((asset) => favoriteItems.contains(asset)).toList();
-    } else {
-      _favorites = List<bool>.filled(widget.assets.length, false);
-    }
-    setState(() {});
+    setState(() {
+      _favorites = widget.assets
+          .map((asset) => favoriteItems?.contains(asset) ?? false)
+          .toList();
+
+      _unlocked = List<bool>.filled(widget.assets.length, false);
+    });
   }
 
-  // Save favorites to SharedPreferences
   Future<void> _saveFavorites() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> favoritesList = widget.assets
@@ -53,65 +63,132 @@ class _ScrollableListViewState extends State<ScrollableListView> {
     await prefs.setStringList('favorites', favoritesList);
   }
 
-  // Toggle the favorite status of an item
   void _toggleFavorite(int index) {
     setState(() {
       _favorites[index] = !_favorites[index];
     });
-    _saveFavorites(); // Save the favorites after toggling
+    _saveFavorites();
+  }
+
+  void _toggleLock(int index) {
+    setState(() {
+      _unlocked[index] = !_unlocked[index];
+    });
+  }
+
+  void _shakeItem(int index) {
+    final shakeAnimation =
+        Tween<double>(begin: 0.0, end: 10.0).animate(CurvedAnimation(
+      parent: _shakeControllers[index],
+      curve: Curves.elasticInOut,
+    ));
+
+    _shakeControllers[index].forward(from: 0.0);
+    _shakeControllers[index].addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _shakeControllers[index].reset();
+      }
+    });
+
+    _toggleLock(index);
   }
 
   @override
   Widget build(BuildContext context) {
-    // Calculate the height for three items (assuming each item is around 80 pixels in height)
-    double itemHeight = 70.0;
-    double listHeight = itemHeight * 3; // For 3 items at a time
+    final size = MediaQuery.of(context).size;
+    final double itemHeight = size.height * 0.1;
+    final double avatarSize = size.height * 0.05;
+    final double fontSize = size.width * 0.04;
 
     return Center(
-      child: SizedBox(
-        height: listHeight, // Limit the height to fit 3 items
-        child: ListView.builder(
-          itemCount: widget.assets.length,
-          itemBuilder: (context, index) {
-            return Center(
-              child: Card(
-                child: ListTile(
-                  trailing: IconButton(
-                    icon: Icon(
-                      _favorites[index]
-                          ? Icons.favorite
-                          : Icons
-                              .favorite_border, // Toggle between filled and border icon
-                      color: _favorites[index]
-                          ? Colors.red // Change to red for filled icon
-                          : null, // Default color for unfavored icon
+      child: ListView.builder(
+        itemCount: widget.assets.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {
+              _shakeItem(index);
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: AnimatedBuilder(
+                animation: _shakeControllers[index],
+                builder: (context, child) {
+                  return Transform.translate(
+                    offset: Offset(_shakeControllers[index].value, 0),
+                    child: child,
+                  );
+                },
+                child: Card(
+                  child: ListTile(
+                    contentPadding: EdgeInsets.symmetric(
+                      vertical: itemHeight * 0.1,
+                      horizontal: itemHeight * 0.2,
                     ),
-                    onPressed: () =>
-                        _toggleFavorite(index), // Toggle favorite status
-                  ),
-                  title: Text(
-                    widget.assets[index],
-                    style: const TextStyle(color: Colors.black), // Black text
-                  ),
-                  subtitle: Text(
-                    widget.phoneNumber,
-                    style: const TextStyle(color: Colors.black), // Black text
-                  ),
-                  leading: CircleAvatar(
-                    backgroundColor:
-                        Colors.black, // Black background for avatars
-                    child: Text(
-                      '${index + 1}',
-                      style: const TextStyle(
-                          color: Colors.white), // White text inside avatars
+                    // Modify this to show either the Bitcoin, Money, or Share icon
+                    trailing: index % 4 == 3
+                        ? const Icon(
+                            Icons.payment,
+                            color: Colors
+                                .black, // Money icon for every fourth item
+                          )
+                        : (index % 3 == 2
+                            ? Image.asset(
+                                'assets/images/bitcoin-black-icon.png',
+
+                                // Bitcoin icon for every third item
+                                width: 24,
+                                height: 24,
+                              )
+                            : IconButton(
+                                // ignore: prefer_const_constructors
+                                // ignore: prefer_const_constructors
+                                icon: Icon(
+                                  Icons.share,
+                                  color: Colors
+                                      .black, // Share icon for all other items
+                                ),
+                                onPressed: () {
+                                  // Share functionality goes here
+                                },
+                              )),
+                    title: Text(
+                      widget.assets[index],
+                      style: TextStyle(
+                        fontSize: fontSize,
+                        color: Colors.black,
+                      ),
+                    ),
+                    subtitle: Text(
+                      widget.phoneNumber,
+                      style: TextStyle(
+                        fontSize: fontSize * 0.8,
+                        color: Colors.black,
+                      ),
+                    ),
+                    leading: CircleAvatar(
+                      radius: avatarSize,
+                      backgroundColor: Colors.black,
+                      child: Icon(
+                        _unlocked[index] ? Icons.lock_open : Icons.lock,
+                        color: Colors.white,
+                        size: avatarSize * 0.8,
+                      ),
                     ),
                   ),
                 ),
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    for (var controller in _shakeControllers) {
+      controller.dispose();
+    }
+    super.dispose();
   }
 }

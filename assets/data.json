@@ -3,7 +3,7 @@
     "field_phone": "0401906485",
     "field_active": "On",
     "field_access_areas": "Office, Laboratory, Garage, Factory",
-    "field_access_assets": "1740 TESTITESTIOffice door, 1731 Road barrier, 1129 Meeting room, 1748 Home door, 1723 Test, 1746 Smartlab front door",
+    "field_access_assets": "1740 TESTITESTIOffice door, 1731 Road barrier, 1129 Meeting room, 1748 Home door, 1723 Test, 1746 Smartlab front door, 1740 Office door, 1731 Road barrier, 1129 Meeting room, 1748 Home door, 1723 Test, 1746 Smartlab front door",
     "field_mobilekey_service": "Lukoton, Salto KS, Bitwards, Yale Access, Maria01, iLoq, Abloy, HID",
     "field_start_timestamp": "2024-09-24T13:49:12+0300\n",
     "field_end_timestamp": "2030-04-24T13:49:34+0300\n",
@@ -15,17 +15,17 @@
   },
   {
     "field_phone": "+358504392559",
-    "field_active": "Off",
-    "field_access_areas": "",
-    "field_access_assets": "1740 Office door, 1731 Road barrier, 1129 Meeting room, 1748 Home door, 1723 Test, 1746 Smartlab front door",
-    "field_mobilekey_service": "",
-    "field_start_timestamp": "2024-09-16T22:14:48+0300\n",
-    "field_end_timestamp": "2024-09-16T22:14:48+0300\n",
-    "field_working_hours": "",
-    "field_id": "",
-    "nid": "33",
-    "vid": "237",
-    "uuid": "127b9959-1e14-4491-900f-f3c20f1246bf"
+    "field_active": "On",
+    "field_access_areas": "Office, Laboratory, Garage, Factory",
+    "field_access_assets": "1740 Office door, 1731 Road barrier, 1129 Meeting room, 1748 Home door, 1723 Test, 1746 Smartlab front door, 1740 Office door, 1731 Road barrier, 1129 Meeting room, 1748 Home door, 1723 Test, 1746 Smartlab front door",
+    "field_mobilekey_service": "Lukoton, Salto KS, Bitwards, Yale Access, Maria01, iLoq, Abloy, HID",
+    "field_start_timestamp": "2024-09-24T13:49:12+0300\n",
+    "field_end_timestamp": "2030-04-24T13:49:34+0300\n",
+    "field_working_hours": "24/7, Office hours",
+    "field_id": "4654654",
+    "nid": "34",
+    "vid": "256",
+    "uuid": "91639d23-906a-4cf3-ac8f-638e618ba2d9"
   },
   {
     "field_phone": "+358504787673",
@@ -87,7 +87,7 @@
     "field_phone": "+358405570875",
     "field_active": "On",
     "field_access_areas": "Office, Laboratory, Garage, Factory",
-    "field_access_assets": "1740 Office door, 1731 Road barrier, 1129 Meeting room, 1748 Home door, 1723 Test, 1746 Smartlab front door",
+    "field_access_assets": "1740 Office door, 1731 Road barrier, 1129 Meeting room, 1748 Home door, 1723 Test, 1746 Smartlab front door, 1740 Office door, 1731 Road barrier, 1129 Meeting room, 1748 Home door, 1723 Test, 1746 Smartlab front door",
     "field_mobilekey_service": "Lukoton",
     "field_start_timestamp": "2024-06-10T17:13:00+0300\n",
     "field_end_timestamp": "2024-06-24T17:13:00+0300\n",
@@ -110,33 +110,6 @@
     "nid": "27",
     "vid": "219",
     "uuid": "390a600d-6759-48b5-bba1-a281dc99e7cf"
-  },
-  {
-    "field_phone": "+358504392559",
-    "field_active": "On",
-    "field_access_areas": "",
-    "field_access_assets": "1740 Office door, 1731 Road barrier, 1129 Meeting room, 1748 Home door, 1723 Test, 1746 Smartlab front door",
-    "field_mobilekey_service": "",
-    "field_start_timestamp": "2024-06-10T12:18:30+0300\n",
-    "field_end_timestamp": "2024-06-10T12:18:30+0300\n",
-    "field_working_hours": "",
-    "field_id": "laardee3",
-    "nid": "26",
-    "vid": "232",
-    "uuid": "e97a42e9-5aff-422c-84e8-c71b5cb76725"
-  },
-  {
-    "field_phone": "+358504392559",
-    "field_active": "Off",
-    "field_access_areas": "",
-    "field_access_assets": "1740 Office door, 1731 Road barrier, 1129 Meeting room, 1748 Home door, 1723 Test",
-    "field_mobilekey_service": "",
-    "field_start_timestamp": "2024-06-10T12:04:25+0300\n",
-    "field_end_timestamp": "2024-06-10T12:04:25+0300\n",
-    "field_working_hours": "",
-    "field_id": "laardee2",
-    "nid": "24",
-    "vid": "203",
-    "uuid": "f82ed9bf-8c38-439b-ae55-b71a91081a9e"
   }
+
 ]

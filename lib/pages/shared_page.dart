@@ -27,11 +27,9 @@ class _FavoritesPageState extends State<FavoritesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Favorites'),
-      ),
+      appBar: AppBar(),
       body: _favorites.isEmpty
-          ? const Center(child: Text('No favorites added.'))
+          ? const Center(child: Text('No Shared Locks.'))
           : ListView.builder(
               itemCount: _favorites.length,
               itemBuilder: (context, index) {

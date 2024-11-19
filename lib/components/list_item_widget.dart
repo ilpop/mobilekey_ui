@@ -6,6 +6,7 @@ class ListItemWidget extends StatelessWidget {
   final String? link;
   final bool isFavorite;
   final VoidCallback onToggleFavorite;
+  final int index; // Add the index parameter to track the position
 
   const ListItemWidget({
     super.key,
@@ -14,6 +15,7 @@ class ListItemWidget extends StatelessWidget {
     this.link,
     required this.isFavorite,
     required this.onToggleFavorite,
+    required this.index, // Accept index as an argument
   });
 
   @override
@@ -57,9 +59,13 @@ class ListItemWidget extends StatelessWidget {
                   ),
                 ),
               ),
+            // Change the icon based on whether it's the third item or not
             IconButton(
               icon: Icon(
-                isFavorite ? Icons.favorite : Icons.favorite_border,
+                index % 3 == 2 // Every third item (index 2, 5, 8, etc.)
+                    ? Icons
+                        .attach_money // Example: money icon for every third item
+                    : (isFavorite ? Icons.share : Icons.share_outlined),
                 color: isFavorite ? Colors.red : null,
               ),
               onPressed: onToggleFavorite,

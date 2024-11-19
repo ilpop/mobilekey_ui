@@ -5,8 +5,9 @@ class HistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('History'),
+    return Scaffold(
+      appBar: AppBar(),
+      body: const Center(child: Text('No Payments.')),
     );
   }
 }

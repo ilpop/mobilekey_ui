@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobilekey_ui/components/scrollable_list_view.dart';
-import 'package:mobilekey_ui/pages/favorites_page.dart';
-import 'package:mobilekey_ui/pages/history_page.dart';
+import 'package:mobilekey_ui/pages/shared_page.dart';
+import 'package:mobilekey_ui/pages/payments_page.dart';
 import 'package:mobilekey_ui/pages/login_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -50,7 +50,18 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('MobileKey'),
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            width: 120,
+            height: 120,
+            child: Image.asset(
+              'images/logo-small.png',
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+        title: const Text('MobileKey.IO'),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -69,12 +80,12 @@ class _HomePageState extends State<HomePage> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Favorites',
+            icon: Icon(Icons.share),
+            label: 'Share',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: 'History',
+            icon: Icon(Icons.payment),
+            label: 'Payments',
           ),
         ],
         currentIndex: _selectedIndex,

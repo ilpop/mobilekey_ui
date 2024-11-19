@@ -57,6 +57,17 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            width: 120,
+            height: 120,
+            child: Image.asset(
+              'images/logo-small.png',
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
         title: const Text('Login'),
       ),
       body: Padding(
