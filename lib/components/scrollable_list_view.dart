@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,23 +17,15 @@ class ScrollableListView extends StatefulWidget {
 
 class _ScrollableListViewState extends State<ScrollableListView>
     with TickerProviderStateMixin {
-  List<bool> _favorites = [];
-  List<bool> _unlocked = [];
+  late List<bool> _favorites;
+  late List<bool> _unlocked;
   final List<AnimationController> _shakeControllers = [];
 
   @override
   void initState() {
     super.initState();
     _initializeStates();
-
-    for (int i = 0; i < widget.assets.length; i++) {
-      _shakeControllers.add(
-        AnimationController(
-          vsync: this,
-          duration: const Duration(milliseconds: 300),
-        ),
-      );
-    }
+    _initializeShakeControllers();
   }
 
   Future<void> _initializeStates() async {
@@ -46,9 +36,17 @@ class _ScrollableListViewState extends State<ScrollableListView>
       _favorites = widget.assets
           .map((asset) => favoriteItems?.contains(asset) ?? false)
           .toList();
-
       _unlocked = List<bool>.filled(widget.assets.length, false);
     });
+  }
+
+  void _initializeShakeControllers() {
+    _shakeControllers.addAll(widget.assets.map(
+      (_) => AnimationController(
+        vsync: this,
+        duration: const Duration(milliseconds: 300),
+      ),
+    ));
   }
 
   Future<void> _saveFavorites() async {
@@ -59,7 +57,6 @@ class _ScrollableListViewState extends State<ScrollableListView>
         .where((entry) => _favorites[entry.key])
         .map((entry) => entry.value)
         .toList();
-
     await prefs.setStringList('favorites', favoritesList);
   }
 
@@ -76,38 +73,84 @@ class _ScrollableListViewState extends State<ScrollableListView>
     });
   }
 
-  void _shakeItem(int index) {
-    final shakeAnimation =
-        Tween<double>(begin: 0.0, end: 10.0).animate(CurvedAnimation(
-      parent: _shakeControllers[index],
-      curve: Curves.elasticInOut,
-    ));
+  Animation<double> _createShakeAnimation(int index) {
+    return Tween<double>(begin: 0.0, end: 10.0).animate(
+      CurvedAnimation(
+        parent: _shakeControllers[index],
+        curve: Curves.elasticInOut,
+      ),
+    );
+  }
 
+  void _shakeItem(int index) {
     _shakeControllers[index].forward(from: 0.0);
     _shakeControllers[index].addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         _shakeControllers[index].reset();
       }
     });
-
     _toggleLock(index);
+  }
+
+  /// Helper to get trailing icons for each item
+  List<Widget> _getTrailingIcons(int index) {
+    List<Widget> icons = [];
+
+    // Add payment icon for every third item
+    if (index % 3 == 2) {
+      icons.add(
+        IconButton(
+          icon: const Icon(Icons.payment, color: Colors.black),
+          onPressed: () {
+            // Handle payment icon press
+            print("Payment icon pressed for index $index");
+          },
+        ),
+      );
+    }
+
+    // Add bitcoin icon for every fourth item
+    if (index % 4 == 3) {
+      icons.add(
+        IconButton(
+          icon: Image.asset(
+            'assets/images/bitcoin-black-icon.png', // Bitcoin icon
+            width: 24,
+            height: 24,
+          ),
+          onPressed: () {
+            // Handle bitcoin icon press
+            print("Bitcoin icon pressed for index $index");
+          },
+        ),
+      );
+    }
+
+    // Add share icon (always present)
+    icons.add(
+      IconButton(
+        icon: const Icon(Icons.share, color: Colors.black),
+        onPressed: () {
+          // Share functionality
+          print("Shared item at index $index");
+        },
+      ),
+    );
+
+    return icons;
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final double itemHeight = size.height * 0.1;
     final double avatarSize = size.height * 0.05;
-    final double fontSize = size.width * 0.04;
 
     return Center(
       child: ListView.builder(
         itemCount: widget.assets.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: () {
-              _shakeItem(index);
-            },
+            onTap: () => _shakeItem(index),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: AnimatedBuilder(
@@ -120,48 +163,18 @@ class _ScrollableListViewState extends State<ScrollableListView>
                 },
                 child: Card(
                   child: ListTile(
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: itemHeight * 0.1,
-                      horizontal: itemHeight * 0.2,
+                    contentPadding: const EdgeInsets.all(16.0),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: _getTrailingIcons(index),
                     ),
-                    // Modify this to show either the Bitcoin, Money, or Share icon
-                    trailing: index % 4 == 3
-                        ? const Icon(
-                            Icons.payment,
-                            color: Colors
-                                .black, // Money icon for every fourth item
-                          )
-                        : (index % 3 == 2
-                            ? Image.asset(
-                                'assets/images/bitcoin-black-icon.png',
-
-                                // Bitcoin icon for every third item
-                                width: 24,
-                                height: 24,
-                              )
-                            : IconButton(
-                                icon: Icon(
-                                  Icons.share,
-                                  color: Colors
-                                      .black, // Share icon for all other items
-                                ),
-                                onPressed: () {
-                                  // Share functionality goes here
-                                },
-                              )),
                     title: Text(
                       widget.assets[index],
-                      style: TextStyle(
-                        fontSize: fontSize,
-                        color: Colors.black,
-                      ),
+                      style: const TextStyle(fontSize: 16, color: Colors.black),
                     ),
                     subtitle: Text(
                       widget.phoneNumber,
-                      style: TextStyle(
-                        fontSize: fontSize * 0.8,
-                        color: Colors.black,
-                      ),
+                      style: const TextStyle(fontSize: 14, color: Colors.black),
                     ),
                     leading: CircleAvatar(
                       radius: avatarSize,
@@ -169,7 +182,6 @@ class _ScrollableListViewState extends State<ScrollableListView>
                       child: Icon(
                         _unlocked[index] ? Icons.lock_open : Icons.lock,
                         color: Colors.white,
-                        size: avatarSize * 0.8,
                       ),
                     ),
                   ),

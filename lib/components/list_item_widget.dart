@@ -6,7 +6,7 @@ class ListItemWidget extends StatelessWidget {
   final String? link;
   final bool isFavorite;
   final VoidCallback onToggleFavorite;
-  final int index; // Add the index parameter to track the position
+  final int index;
 
   const ListItemWidget({
     super.key,
@@ -15,17 +15,21 @@ class ListItemWidget extends StatelessWidget {
     this.link,
     required this.isFavorite,
     required this.onToggleFavorite,
-    required this.index, // Accept index as an argument
+    required this.index,
   });
+
+  IconData _getIcon() {
+    if (index % 3 == 2) {
+      return Icons.attach_money; // Money icon for every third item
+    }
+    return isFavorite ? Icons.share : Icons.share_outlined;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.black,
-          width: 2.0,
-        ),
+        border: Border.all(color: Colors.black, width: 2.0),
         borderRadius: BorderRadius.circular(10),
       ),
       child: ListTile(
@@ -40,10 +44,7 @@ class ListItemWidget extends StatelessWidget {
           children: [
             Text(
               text,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
             if (link != null)
               TextButton(
@@ -59,15 +60,8 @@ class ListItemWidget extends StatelessWidget {
                   ),
                 ),
               ),
-            // Change the icon based on whether it's the third item or not
             IconButton(
-              icon: Icon(
-                index % 3 == 2 // Every third item (index 2, 5, 8, etc.)
-                    ? Icons
-                        .attach_money // Show the money icon for every third item
-                    : (isFavorite ? Icons.share : Icons.share_outlined),
-                color: isFavorite ? Colors.red : null,
-              ),
+              icon: Icon(_getIcon(), color: isFavorite ? Colors.red : null),
               onPressed: onToggleFavorite,
             ),
           ],
