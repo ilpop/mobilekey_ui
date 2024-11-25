@@ -17,11 +17,11 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
 flutter:
   assets:
     - assets/data.json
-    - assets/images/logo-small.png
-    - assets/images/bitcoin-black-icon.png
+    - assets/images/
+    
   uses-material-design: true
