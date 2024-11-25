@@ -21,7 +21,7 @@ class _ScrollableListViewState extends State<ScrollableListView>
     with TickerProviderStateMixin {
   List<bool> _favorites = [];
   List<bool> _unlocked = [];
-  List<AnimationController> _shakeControllers = [];
+  final List<AnimationController> _shakeControllers = [];
 
   @override
   void initState() {
@@ -140,8 +140,6 @@ class _ScrollableListViewState extends State<ScrollableListView>
                                 height: 24,
                               )
                             : IconButton(
-                                // ignore: prefer_const_constructors
-                                // ignore: prefer_const_constructors
                                 icon: Icon(
                                   Icons.share,
                                   color: Colors

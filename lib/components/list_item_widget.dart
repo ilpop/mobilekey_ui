@@ -64,7 +64,7 @@ class ListItemWidget extends StatelessWidget {
               icon: Icon(
                 index % 3 == 2 // Every third item (index 2, 5, 8, etc.)
                     ? Icons
-                        .attach_money // Example: money icon for every third item
+                        .attach_money // Show the money icon for every third item
                     : (isFavorite ? Icons.share : Icons.share_outlined),
                 color: isFavorite ? Colors.red : null,
               ),
