@@ -5,10 +5,10 @@ class FavoritesPage extends StatefulWidget {
   const FavoritesPage({super.key});
 
   @override
-  _FavoritesPageState createState() => _FavoritesPageState();
+  FavoritesPageState createState() => FavoritesPageState();
 }
 
-class _FavoritesPageState extends State<FavoritesPage> {
+class FavoritesPageState extends State<FavoritesPage> {
   List<String> _favorites = [];
 
   @override

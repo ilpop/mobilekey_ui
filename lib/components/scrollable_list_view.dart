@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 
 class ScrollableListView extends StatefulWidget {
   final String phoneNumber;
@@ -12,12 +12,12 @@ class ScrollableListView extends StatefulWidget {
   });
 
   @override
-  _ScrollableListViewState createState() => _ScrollableListViewState();
+  ScrollableListViewState createState() => ScrollableListViewState();
 }
 
-class _ScrollableListViewState extends State<ScrollableListView>
+class ScrollableListViewState extends State<ScrollableListView>
     with TickerProviderStateMixin {
-  late List<bool> _favorites;
+  //late List<bool> _favorites;
   late List<bool> _unlocked;
   final List<AnimationController> _shakeControllers = [];
 
@@ -29,7 +29,7 @@ class _ScrollableListViewState extends State<ScrollableListView>
   }
 
   Future<void> _initializeStates() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //SharedPreferences prefs = await SharedPreferences.getInstance();
     //List<String>? favoriteItems = prefs.getStringList('favorites');
 
     setState(() {
@@ -51,6 +51,7 @@ class _ScrollableListViewState extends State<ScrollableListView>
 
   void _toggleLock(int index) {
     setState(() {
+      _createShakeAnimation(index);
       _unlocked[index] = !_unlocked[index];
     });
   }
