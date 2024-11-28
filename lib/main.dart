@@ -8,9 +8,8 @@ import 'services/graphql_client.dart'; // Import the GraphQLConfig class
 
 void main() async {
   // Load the .env file before app initialization
-  await dotenv.load(); // Ensure dotenv is always loaded
+  await dotenv.load();
 
-  // Debug: Check if the environment variables are loaded
   print(dotenv.env['GRAPHQL_API_URL']);
   print(dotenv.env['API_KEY']);
   print(dotenv.env['BEARER_TOKEN']);
