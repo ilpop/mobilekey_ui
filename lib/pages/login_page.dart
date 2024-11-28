@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../services/json_parser.dart';
+import '../services/graphql_client.dart';
 import 'home_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -13,40 +13,47 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _phoneController = TextEditingController();
   String? _errorMessage;
 
-  // Function to validate the mobile number from the JSON data
+  // Function to validate the mobile number from GraphQL data
   Future<void> _login() async {
     String enteredPhone = _phoneController.text.trim();
-    JsonParser jsonParser = JsonParser();
-    String assetPath = 'assets/data.json';
 
     try {
-      List<dynamic> jsonData = await jsonParser.loadJsonFromAssets(assetPath);
+      if (enteredPhone == "1234") {
+        // Check if the phone number is "1234"
+        final result = await GraphQLConfig
+            .fetchData(); // Fetch data after successful login
 
-      for (var item in jsonData) {
-        if (item['field_phone'] == enteredPhone) {
-          Map<String, dynamic> extractedData =
-              jsonParser.extractPhoneNumberAndAssets(item);
+        if (result.hasException) {
+          setState(() {
+            _errorMessage = 'Error: ${result.exception.toString()}';
+          });
+          return;
+        }
 
-          // If the phone number is found, navigate to the home page and pass the data
+        var assets = result.data?['assets'];
+        if (assets != null && assets.isNotEmpty) {
+          // Navigate to the HomePage after successful login and data fetch
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => HomePage(
-                phoneNumber: extractedData['phoneNumber'],
-                assets: extractedData['assets'],
+                phoneNumber: enteredPhone, // Pass the phone number
+                assets: List.from(assets), // Pass the assets list
               ),
             ),
           );
-          return;
+        } else {
+          setState(() {
+            _errorMessage = 'No assets found.';
+          });
         }
+      } else {
+        setState(() {
+          _errorMessage = 'Invalid phone number.';
+        });
       }
-
-      // If phone number not found, show an error
-      setState(() {
-        _errorMessage = 'Phone number not found.';
-      });
     } catch (e) {
-      print('Error loading data: $e');
+      print('Error fetching data: $e');
       setState(() {
         _errorMessage = 'An error occurred. Please try again.';
       });
@@ -56,20 +63,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SizedBox(
-            width: 120,
-            height: 120,
-            child: Image.asset(
-              'images/logo-small.png',
-              fit: BoxFit.contain,
-            ),
-          ),
-        ),
-        title: const Text('Login'),
-      ),
+      appBar: AppBar(title: const Text('Login')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -86,7 +80,6 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _login,
-              style: ElevatedButton.styleFrom(),
               child: const Text('Login'),
             ),
           ],

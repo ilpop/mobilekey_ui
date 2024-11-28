@@ -18,12 +18,12 @@ class ListItemWidget extends StatelessWidget {
     required this.index,
   });
 
-  IconData _getIcon() {
-    if (index % 3 == 2) {
-      return Icons.attach_money; // Money icon for every third item
-    }
-    return isFavorite ? Icons.share : Icons.share_outlined;
-  }
+  // IconData _getIcon() {
+  //   if (index % 3 == 2) {
+  //     return Icons.attach_money; // Money icon for every third item
+  //   }
+  //   return isFavorite ? Icons.share : Icons.share_outlined;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -60,10 +60,6 @@ class ListItemWidget extends StatelessWidget {
                   ),
                 ),
               ),
-            IconButton(
-              icon: Icon(_getIcon(), color: isFavorite ? Colors.red : null),
-              onPressed: onToggleFavorite,
-            ),
           ],
         ),
       ),

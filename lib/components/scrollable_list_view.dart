@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ScrollableListView extends StatefulWidget {
   final String phoneNumber;
-  final List<String> assets;
+  final List<dynamic> assets; // Accept assets as a List
 
   const ScrollableListView({
     super.key,
@@ -30,12 +30,12 @@ class _ScrollableListViewState extends State<ScrollableListView>
 
   Future<void> _initializeStates() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String>? favoriteItems = prefs.getStringList('favorites');
+    //List<String>? favoriteItems = prefs.getStringList('favorites');
 
     setState(() {
-      _favorites = widget.assets
-          .map((asset) => favoriteItems?.contains(asset) ?? false)
-          .toList();
+      // _favorites = widget.assets
+      //     .map((asset) => favoriteItems?.contains(asset['assetName']) ?? false)
+      //     .toList();
       _unlocked = List<bool>.filled(widget.assets.length, false);
     });
   }
@@ -47,24 +47,6 @@ class _ScrollableListViewState extends State<ScrollableListView>
         duration: const Duration(milliseconds: 300),
       ),
     ));
-  }
-
-  Future<void> _saveFavorites() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> favoritesList = widget.assets
-        .asMap()
-        .entries
-        .where((entry) => _favorites[entry.key])
-        .map((entry) => entry.value)
-        .toList();
-    await prefs.setStringList('favorites', favoritesList);
-  }
-
-  void _toggleFavorite(int index) {
-    setState(() {
-      _favorites[index] = !_favorites[index];
-    });
-    _saveFavorites();
   }
 
   void _toggleLock(int index) {
@@ -92,7 +74,6 @@ class _ScrollableListViewState extends State<ScrollableListView>
     _toggleLock(index);
   }
 
-  /// Helper to get trailing icons for each item
   List<Widget> _getTrailingIcons(int index) {
     List<Widget> icons = [];
 
@@ -149,6 +130,7 @@ class _ScrollableListViewState extends State<ScrollableListView>
       child: ListView.builder(
         itemCount: widget.assets.length,
         itemBuilder: (context, index) {
+          var asset = widget.assets[index]; // Access the asset data
           return GestureDetector(
             onTap: () => _shakeItem(index),
             child: Padding(
@@ -169,12 +151,17 @@ class _ScrollableListViewState extends State<ScrollableListView>
                       children: _getTrailingIcons(index),
                     ),
                     title: Text(
-                      widget.assets[index],
+                      asset['assetName'], // Display asset name
                       style: const TextStyle(fontSize: 16, color: Colors.black),
                     ),
-                    subtitle: Text(
-                      widget.phoneNumber,
-                      style: const TextStyle(fontSize: 14, color: Colors.black),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('ID: ${asset['id']}'),
+                        Text('Allowed: ${asset['allowed']}'),
+                        Text('Asset ID: ${asset['assetId']}'),
+                        Text('Provider: ${asset['provider']}'),
+                      ],
                     ),
                     leading: CircleAvatar(
                       radius: avatarSize,

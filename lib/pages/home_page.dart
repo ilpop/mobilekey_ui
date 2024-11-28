@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../components/scrollable_list_view.dart';
 import 'login_page.dart';
 import 'payments_page.dart';
@@ -7,7 +6,7 @@ import 'shared_page.dart';
 
 class HomePage extends StatefulWidget {
   final String phoneNumber;
-  final List<String> assets;
+  final List<dynamic> assets;
 
   const HomePage({super.key, required this.phoneNumber, required this.assets});
 
@@ -19,31 +18,27 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
   // List of pages to switch between
-  // A list of pages to display, passing the phone number and assets to the home page
   List<Widget> get _pages {
     return [
       ScrollableListView(
         phoneNumber: widget.phoneNumber,
-        assets: widget.assets,
+        assets: widget.assets, // Passing assets to ScrollableListView
       ),
-      const FavoritesPage(), // Favorites Page (Placeholder)
-      const HistoryPage(), // History Page (Placeholder)
+      const FavoritesPage(),
+      const HistoryPage(),
     ];
   }
 
-  // Function to handle bottom navigation item taps
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
-  // Function to handle logout action
   void _logout() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(
-          builder: (context) => const LoginPage()), // Navigate back to login
+      MaterialPageRoute(builder: (context) => const LoginPage()),
     );
   }
 
@@ -66,7 +61,7 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
-            onPressed: _logout, // Handle logout
+            onPressed: _logout,
             tooltip: 'Logout',
           ),
         ],
@@ -90,7 +85,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        onTap: _onItemTapped, // Handle the navigation tap
+        onTap: _onItemTapped,
       ),
     );
   }
