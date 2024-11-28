@@ -10,12 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  graphql_flutter: ^5.1.2
   shared_preferences: ^2.0.0
   cupertino_icons: ^1.0.8
   url_launcher: ^6.1.5
-  dependencies:
-  graphql_flutter: ^5.2.0
-
 
 dev_dependencies:
   flutter_test:
