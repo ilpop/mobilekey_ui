@@ -1,45 +1,98 @@
-import 'package:flutter/material.dart';
-import '/pages/login_page.dart';
+import 'dart:io';
 
-void main() => runApp(const MyApp());
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'services/graphql_client.dart'; // Import the GraphQLConfig class
+
+void main() async {
+  // Load the .env file before app initialization
+  await dotenv.load(); // Ensure dotenv is always loaded
+
+  // Debug: Check if the environment variables are loaded
+  print(dotenv.env['GRAPHQL_API_URL']);
+  print(dotenv.env['API_KEY']);
+  print(dotenv.env['BEARER_TOKEN']);
+  WidgetsFlutterBinding.ensureInitialized();
+  await initHiveForFlutter();
+
+  final client = GraphQLConfig.initClient().value;
+
+  runApp(MyApp(client: client));
+}
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final GraphQLClient client;
+
+  const MyApp({super.key, required this.client});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
+      title: 'Flutter GraphQL Test',
       theme: ThemeData(
-        // Set the primary color to black and text to white
-        primaryColor: Colors.black,
-        scaffoldBackgroundColor: Colors.white,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.black, // Black background for AppBar
-          foregroundColor: Colors.white, // White text for AppBar
-          elevation: 0, // Flat style (no shadow)
-        ),
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor:
-              Colors.black, // Black background for BottomNavigationBar
-          selectedItemColor: Colors.white, // White selected icon/text
-          unselectedItemColor: Colors.grey, // Grey unselected icon/text
-        ),
-        textTheme: const TextTheme(
-          bodyLarge: TextStyle(color: Colors.black), // Black body text
-          bodyMedium:
-              TextStyle(color: Colors.black), // Black body text (smaller)
-          titleLarge: TextStyle(
-            color: Colors.white, // White AppBar title text
-            fontSize: 20.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        iconTheme: const IconThemeData(
-          color: Colors.white, // White icons
-        ),
+        primarySwatch: Colors.blue,
       ),
-      home: const LoginPage(),
+      home: HomePage(client: client),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  final GraphQLClient client;
+
+  const HomePage({super.key, required this.client});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('GraphQL Data')),
+      body: FutureBuilder<QueryResult>(
+        future: GraphQLConfig.fetchData(), // Fetch data from API
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+
+          if (snapshot.hasData) {
+            final identity = snapshot.data!.data?['identity'];
+            final assets = snapshot.data!.data?['assets'];
+
+            return ListView.builder(
+              itemCount: assets.length,
+              itemBuilder: (context, index) {
+                var asset = assets[index];
+                // Print asset details
+                print('Asset ID: ${asset['id']}');
+                print('Allowed: ${asset['allowed']}');
+                print('Asset ID (assetId): ${asset['assetId']}');
+                print('Asset Name: ${asset['assetName']}');
+                print('Provider: ${asset['provider']}');
+
+                return ListTile(
+                  title: Text(asset['assetName']),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('ID: ${asset['id']}'),
+                      Text('Allowed: ${asset['allowed']}'),
+                      Text('Asset ID: ${asset['assetId']}'),
+                      Text('Provider: ${asset['provider']}'),
+                    ],
+                  ),
+                );
+              },
+            );
+          }
+
+          return const Center(child: Text('No Data Available'));
+        },
+      ),
     );
   }
 }
