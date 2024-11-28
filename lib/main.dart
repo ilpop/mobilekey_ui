@@ -1,18 +1,11 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'services/graphql_client.dart'; // Import the GraphQLConfig class
+import 'services/graphql_client.dart';
 
 void main() async {
   // Load the .env file before app initialization
   await dotenv.load();
-
-  print(dotenv.env['GRAPHQL_API_URL']);
-  print(dotenv.env['API_KEY']);
-  print(dotenv.env['BEARER_TOKEN']);
   WidgetsFlutterBinding.ensureInitialized();
   await initHiveForFlutter();
 
@@ -59,7 +52,7 @@ class HomePage extends StatelessWidget {
           }
 
           if (snapshot.hasData) {
-            final identity = snapshot.data!.data?['identity'];
+            //final identity = snapshot.data!.data?['identity'];
             final assets = snapshot.data!.data?['assets'];
 
             return ListView.builder(

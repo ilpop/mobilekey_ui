@@ -21,7 +21,6 @@ class HomePage extends StatelessWidget {
 
           if (snapshot.hasData) {
             // Extract the data from the query result
-            final identity = snapshot.data!.data?['identity'];
             final assets = snapshot.data!.data?['assets'];
 
             // Display the data
