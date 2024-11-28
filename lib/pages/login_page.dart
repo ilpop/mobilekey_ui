@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobilekey_ui/services/json_parser.dart';
-import 'package:mobilekey_ui/pages/home_page.dart';
+import '../services/json_parser.dart';
+import 'home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

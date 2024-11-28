@@ -1,6 +1,6 @@
 {
-    "name": "mobilekey_ui",
-    "short_name": "mobilekey_ui",
+    "name": "WebKey.ID",
+    "short_name": "WebKey.ID",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

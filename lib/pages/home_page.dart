@@ -1,8 +1,8 @@
+import 'login_page.dart';
 import 'package:flutter/material.dart';
-import 'package:mobilekey_ui/components/scrollable_list_view.dart';
-import 'package:mobilekey_ui/pages/shared_page.dart';
-import 'package:mobilekey_ui/pages/payments_page.dart';
-import 'package:mobilekey_ui/pages/login_page.dart';
+import '../components/scrollable_list_view.dart';
+import 'payments_page.dart';
+import 'shared_page.dart';
 
 class HomePage extends StatefulWidget {
   final String phoneNumber;
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        title: const Text('MobileKey.IO'),
+        title: const Text('WebKey.ID'),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
