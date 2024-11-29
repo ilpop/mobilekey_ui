@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart'; // Add this import
 
-import 'package:mobilekey_ui/main.dart';
-import 'package:mobilekey_ui/services/graphql_client.dart';
+import 'package:webkey_id/main.dart';
+import 'package:webkey_id/services/graphql_client.dart';
 
 void main() {
   // Mock dotenv loading for tests

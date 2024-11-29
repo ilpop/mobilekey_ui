@@ -1,4 +1,4 @@
-name: mobilekey_ui
+name: webkey_id
 description: "WebKey.ID is a app to open locks everywhere."
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
