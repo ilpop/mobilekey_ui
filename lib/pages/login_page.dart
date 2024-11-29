@@ -31,14 +31,16 @@ class LoginPageState extends State<LoginPage> {
         }
 
         var assets = result.data?['assets'];
+        var identityInfo = result.data?['identity'];
         if (assets != null && assets.isNotEmpty) {
           // Navigate to the HomePage after successful login and data fetch
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => HomePage(
-                phoneNumber: enteredPhone, // Pass the phone number
+                phoneNumber: enteredPhone,
                 assets: List.from(assets), // Pass the assets list
+                identity: Map.from(identityInfo),
               ),
             ),
           );

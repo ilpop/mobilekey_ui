@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class FavoritesPage extends StatefulWidget {
-  const FavoritesPage({super.key});
+class SharedPage extends StatefulWidget {
+  const SharedPage({super.key});
 
   @override
-  FavoritesPageState createState() => FavoritesPageState();
+  SharedPageState createState() => SharedPageState();
 }
 
-class FavoritesPageState extends State<FavoritesPage> {
+class SharedPageState extends State<SharedPage> {
   List<String> _favorites = [];
 
   @override

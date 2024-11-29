@@ -7,8 +7,14 @@ import 'shared_page.dart';
 class HomePage extends StatefulWidget {
   final String phoneNumber;
   final List<dynamic> assets;
+  final Map<String, dynamic> identity;
 
-  const HomePage({super.key, required this.phoneNumber, required this.assets});
+  const HomePage({
+    super.key,
+    required this.phoneNumber,
+    required this.assets,
+    required this.identity,
+  });
 
   @override
   HomePageState createState() => HomePageState();
@@ -23,9 +29,10 @@ class HomePageState extends State<HomePage> {
       ScrollableListView(
         phoneNumber: widget.phoneNumber,
         assets: widget.assets, // Passing assets to ScrollableListView
+        identityInfo: widget.identity,
       ),
-      const FavoritesPage(),
-      const HistoryPage(),
+      const SharedPage(),
+      const PaymentsPage(),
     ];
   }
 

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-//import 'package:shared_preferences/shared_preferences.dart';
 
 class ScrollableListView extends StatefulWidget {
   final String phoneNumber;
   final List<dynamic> assets; // Accept assets as a List
+  final identityInfo;
 
   const ScrollableListView({
     super.key,
     required this.phoneNumber,
     required this.assets,
+    required this.identityInfo,
   });
 
   @override
@@ -17,7 +18,6 @@ class ScrollableListView extends StatefulWidget {
 
 class ScrollableListViewState extends State<ScrollableListView>
     with TickerProviderStateMixin {
-  //late List<bool> _favorites;
   late List<bool> _unlocked;
   final List<AnimationController> _shakeControllers = [];
 
@@ -44,7 +44,7 @@ class ScrollableListViewState extends State<ScrollableListView>
     _shakeControllers.addAll(widget.assets.map(
       (_) => AnimationController(
         vsync: this,
-        duration: const Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 600),
       ),
     ));
   }
@@ -127,66 +127,83 @@ class ScrollableListViewState extends State<ScrollableListView>
     final size = MediaQuery.of(context).size;
     final double avatarSize = size.height * 0.05;
 
-    return Center(
-      child: ListView.builder(
-        itemCount: widget.assets.length,
-        itemBuilder: (context, index) {
-          var asset = widget.assets[index]; // Access the asset data
-          return GestureDetector(
-            onTap: () => _shakeItem(index),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: AnimatedBuilder(
-                animation: _shakeControllers[index],
-                builder: (context, child) {
-                  return Transform.translate(
-                    offset: Offset(_shakeControllers[index].value, 0),
-                    child: child,
-                  );
-                },
-                child: Card(
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.all(16.0),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: _getTrailingIcons(index),
-                    ),
-                    title: Text(
-                      asset['assetName'], // Display asset name
-                      style: const TextStyle(fontSize: 16, color: Colors.black),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('ID: ${asset['id']}'),
-                        Text('Allowed: ${asset['allowed']}'),
-                        Text('Asset ID: ${asset['assetId']}'),
-                        Text('Provider: ${asset['provider']}'),
-                      ],
-                    ),
-                    leading: CircleAvatar(
-                      radius: avatarSize,
-                      backgroundColor: Colors.black,
-                      child: Icon(
-                        _unlocked[index] ? Icons.lock_open : Icons.lock,
-                        color: Colors.white,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Header section for identity information
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Identity Information',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 8),
+              Text('Created: ${widget.identityInfo['created']}'),
+              Text('Modified: ${widget.identityInfo['modified']}'),
+              Text('State: ${widget.identityInfo['state']}'),
+            ],
+          ),
+        ),
+        const Divider(), // Separator between header and list
+        // Scrollable list for assets
+        Expanded(
+          child: ListView.builder(
+            itemCount: widget.assets.length,
+            itemBuilder: (context, index) {
+              var asset = widget.assets[index]; // Access the asset data
+
+              return GestureDetector(
+                onTap: () => _shakeItem(index),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: AnimatedBuilder(
+                    animation: _shakeControllers[index],
+                    builder: (context, child) {
+                      return Transform.translate(
+                        offset: Offset(_shakeControllers[index].value, 0),
+                        child: child,
+                      );
+                    },
+                    child: Card(
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.all(16.0),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: _getTrailingIcons(index),
+                        ),
+                        title: Text(
+                          asset['assetName'], // Display asset name
+                          style: const TextStyle(
+                              fontSize: 16, color: Colors.black),
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Allowed: ${asset['allowed']}'),
+                            Text('Asset ID: ${asset['assetId']}'),
+                            Text('Provider: ${asset['provider']}'),
+                          ],
+                        ),
+                        leading: CircleAvatar(
+                          radius: avatarSize,
+                          backgroundColor: Colors.black,
+                          child: Icon(
+                            _unlocked[index] ? Icons.lock_open : Icons.lock,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ),
-          );
-        },
-      ),
+              );
+            },
+          ),
+        ),
+      ],
     );
-  }
-
-  @override
-  void dispose() {
-    for (var controller in _shakeControllers) {
-      controller.dispose();
-    }
-    super.dispose();
   }
 }

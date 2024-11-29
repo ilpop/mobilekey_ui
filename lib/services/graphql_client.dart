@@ -6,9 +6,8 @@ class GraphQLConfig {
   static final HttpLink httpLink = HttpLink(
     dotenv.env['GRAPHQL_API_URL'] ?? 'https://default-url.com/graphql',
     defaultHeaders: {
-      'x-api-key': dotenv.env['API_KEY'] ?? '', // Use API_KEY from .env
-      'Authorization':
-          dotenv.env['BEARER_TOKEN'] ?? '', // Use BEARER_TOKEN from .env
+      'x-api-key': dotenv.env['API_KEY'] ?? '',
+      'Authorization': dotenv.env['BEARER_TOKEN'] ?? '',
     },
   );
 
