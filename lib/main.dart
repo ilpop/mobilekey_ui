@@ -15,11 +15,16 @@ void main() async {
   runApp(MyApp(client: client));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   final GraphQLClient client;
 
   const MyApp({super.key, required this.client});
 
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
