@@ -52,6 +52,16 @@ class ScrollableListViewState extends State<ScrollableListView>
       _createShakeAnimation(index);
       _unlocked[index] = !_unlocked[index];
     });
+    // If unlocked, set a 5-second delay to lock it again
+    if (_unlocked[index]) {
+      Future.delayed(const Duration(seconds: 5), () {
+        if (mounted) {
+          setState(() {
+            _unlocked[index] = false; // Lock the item again
+          });
+        }
+      });
+    }
   }
 
   Animation<double> _createShakeAnimation(int index) {

@@ -34,16 +34,18 @@ class LoginPageState extends State<LoginPage> {
         var identityInfo = result.data?['identity'];
         if (assets != null && assets.isNotEmpty) {
           // Navigate to the HomePage after successful login and data fetch
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomePage(
-                phoneNumber: enteredPhone,
-                assets: List.from(assets), // Pass the assets list
-                identity: Map.from(identityInfo),
+          if (mounted) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomePage(
+                  phoneNumber: enteredPhone,
+                  assets: List.from(assets), // Pass the assets list
+                  identity: Map.from(identityInfo),
+                ),
               ),
-            ),
-          );
+            );
+          }
         } else {
           setState(() {
             _errorMessage = 'No assets found.';
